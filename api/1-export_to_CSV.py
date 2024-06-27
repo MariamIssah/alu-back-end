@@ -1,18 +1,13 @@
 #!/usr/bin/python3
 """
-This script retrieves and exports an employee's TODO list to a CSV file.
+Python script that returns TODO list progress for a given employee ID and
+outputs it in CSV format.
 """
-
 import csv
 import json
 import requests
 from sys import argv
 
-# Define HTTP headers for the API requests
-headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-}
 
 if __name__ == "__main__":
     # Get the user ID from the command-line argument
@@ -45,4 +40,3 @@ if __name__ == "__main__":
         writer = csv.writer(user, delimiter=',', quoting=csv.QUOTE_ALL)
         for k, v in tasks.items():
             writer.writerow([USER_ID, userName, v, k])
-
