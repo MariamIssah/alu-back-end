@@ -7,8 +7,6 @@ import csv
 import json
 import requests
 from sys import argv
-
-
 if __name__ == "__main__":
     # Get the user ID from the command-line argument
     user_id = argv[1]
