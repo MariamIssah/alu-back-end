@@ -1,55 +1,60 @@
 #!/usr/bin/python3
-
-import requests
-import sys
+"""
+    This employee ID, gives out all the information of the TODO list of the employee
+"""
 import csv
+import json
+import requests
+from sys import argv
 
-def fetch_employee_data(employee_id):
-    base_url = 'https://jsonplaceholder.typicode.com'
-    
-    # Fetch user information
-    user_response = requests.get(f'{base_url}/users/{employee_id}')
-    if user_response.status_code != 200:
-        print(f"Error: Could not fetch user data for employee ID {employee_id}")
-        return None, None
-    
-    user_info = user_response.json()
-    username = user_info['username']
-    
-    # Fetch todo list for the user
-    todo_response = requests.get(f'{base_url}/todos?userId={employee_id}')
-    if todo_response.status_code != 200:
-        print(f"Error: Could not fetch TODO data for employee ID {employee_id}")
-        return None, None
-    
-    todos = todo_response.json()
-    
-    return username, todos
 
-def export_to_csv(employee_id, username, todos):
-    filename = f"{employee_id}.csv"
-    with open(filename, 'w', newline='') as csvfile:
-        fieldnames = ['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        
-        writer.writeheader()
-        for task in todos:
-            writer.writerow({
-                'USER_ID': employee_id,
-                'USERNAME': username,
-                'TASK_COMPLETED_STATUS': task['completed'],
-                'TASK_TITLE': task['title']
-            })
-    
-    print(f"CSV data exported to {filename}")
+"""
+    Define HTTP headers for the API requests
+"""
+headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+}
+
+"""
+    Define the header for the CSV file
+"""
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 1-export_to_CSV.py <employee_id>")
-        sys.exit(1)
-    
-    employee_id = sys.argv[1]
-    username, todos = fetch_employee_data(employee_id)
-    
-    if username and todos:
-        export_to_csv(employee_id, username, todos)
+    """Get the user ID from the command-line argument"""
+    user_id = argv[1]
+    """
+        Step 1: Retrieve user information from the JSONPlaceholder API.
+    """
+    request_employee = requests.get(
+        f'https://jsonplaceholder.typicode.com/users/{user_id}')
+    employee = json.loads(request_employee.text)
+    employee_name = employee.get("name")
+    userName = employee.get("username")
+
+    """
+        Step 2: Retrieve the user's tasks from the API.
+        """
+    request_todos = requests.get(
+        f'https://jsonplaceholder.typicode.com/users/{user_id}/todos')
+    tasks = {}
+    employee_todos = json.loads(request_todos.text)
+
+    """
+        Step 3: Create a list of tasks.
+    """
+    for dictionary in employee_todos:
+        tasks.update({dictionary.get("title"): dictionary.get("completed")})
+
+    """
+        Step 4: Generate the CSV filename based on the user's ID.
+    """
+    USER_ID = user_id
+
+    """
+        Create and write the data to a CSV file.
+    """
+    with open(f'{USER_ID}.csv', 'w', encoding="UTF8", newline='') as user:
+        writer = csv.writer(user, delimiter=',', quoting=csv.QUOTE_ALL)
+        for k, v in tasks.items():
+            writer.writerow([USER_ID, userName, v, k])
