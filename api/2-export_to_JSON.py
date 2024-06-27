@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-Python script that returns TODO list progress for a given employee ID.
-This script fetches data from an API to retrieve and analyze the TODO list progress.
+Python script that fetches and analyzes TODO list progress from an API.
 """
 import json
 import requests
