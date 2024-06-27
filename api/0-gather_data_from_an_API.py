@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-    Given employee ID, returns information about his/her TODO list progress.
+    This employee ID, gives out the information about TODO list employee.
 """
 
 
