@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-     Tte employee ID,will returns all information about the TODO list of this employee.
+Tte employee ID,will returns all information about the TODO list of this employee.
 """
 import json
 import requests
