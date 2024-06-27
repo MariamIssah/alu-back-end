@@ -2,10 +2,9 @@
 """
      Tte employee ID,will returns all information about the TODO list of this employee.
 """
-
-
 import requests
 import sys
+
 
 def fetch_employee_data(employee_id):
     base_url = 'https://jsonplaceholder.typicode.com'
@@ -29,6 +28,7 @@ def fetch_employee_data(employee_id):
 
     return employee_name, todos
 
+
 def display_task_progress(employee_name, todos):
     total_tasks = len(todos)
     done_tasks = [task for task in todos if task['completed']]
@@ -38,6 +38,7 @@ def display_task_progress(employee_name, todos):
     print(f"Employee {employee_name} is done with tasks({total_done_tasks}/{total_tasks}):")
     for task in done_tasks:
         print(f"\t {task['title']}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
